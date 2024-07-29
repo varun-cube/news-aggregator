@@ -1,10 +1,9 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const router = express.Router();
-
+const config = require('../utils/config');
 const users = [];
-const JWT_SECRET = 'your_jwt_secret_key';
+const JWT_SECRET = config.JWT_SECRET;
 const createUser = async (req, res) => {
     const { username, password } = req.body;
 
@@ -17,7 +16,7 @@ const createUser = async (req, res) => {
         return res.status(400).json({ message: 'User already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, config.JWT_SALT);
 
     users.push({ username, password: hashedPassword, preferences: [] });
 
